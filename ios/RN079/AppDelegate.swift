@@ -9,6 +9,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
   var reactNativeDelegate: ReactNativeDelegate?
   var reactNativeFactory: RCTReactNativeFactory?
+  
+  func setupWindowFrameObserver() {
+      NotificationCenter.default.addObserver(
+          forName: NSNotification.Name("RCTWindowFrameDidChangeNotification"),
+          object: nil,
+          queue: OperationQueue.main
+      ) { notification in
+        print("Called!")
+      }
+  }
 
   func application(
     _ application: UIApplication,
@@ -17,7 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let delegate = ReactNativeDelegate()
     let factory = RCTReactNativeFactory(delegate: delegate)
     delegate.dependencyProvider = RCTAppDependencyProvider()
-
+    
     reactNativeDelegate = delegate
     reactNativeFactory = factory
 
@@ -29,6 +39,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       launchOptions: launchOptions
     )
 
+    setupWindowFrameObserver()
+    
     return true
   }
 }
